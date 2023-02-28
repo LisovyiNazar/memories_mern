@@ -1,9 +1,9 @@
 import express from 'express'
+import { getPosts, createPost } from '../controllers/posts.controller.js'
 
-const postsRouter = express.Router({ mergeParams: true })
+const postsRouter = express.Router()
 
-postsRouter.get('/', (req, res) => {
-    res.send('THIS WORKS!')
-})
+postsRouter.get('/', getPosts)
+postsRouter.post('/', createPost)
 
 export default postsRouter
