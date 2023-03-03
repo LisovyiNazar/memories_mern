@@ -5,7 +5,7 @@ const postsReduser = (state = [], action) => {
         case FETCH_ALL_POSTS:
             return action.payload
         case CREATE_POST:
-            return state
+            return [...state, action.payload]
         default:
             return state
     }

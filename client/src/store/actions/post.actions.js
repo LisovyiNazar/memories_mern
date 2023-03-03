@@ -1,5 +1,5 @@
 import * as api from '../../api'
-import { FETCH_ALL_POSTS } from '../types/posts.types'
+import { FETCH_ALL_POSTS, CREATE_POST } from '../types/posts.types'
 
 export const getPosts = () => async (dispath) => {
     try {
@@ -15,3 +15,16 @@ export const getPosts = () => async (dispath) => {
 
 }
 
+export const createPost = (post) => async (dispath) => {
+    try {
+        const { data } = await api.createPost(post)
+        
+        dispath({
+            type: CREATE_POST,
+            payload: data 
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
