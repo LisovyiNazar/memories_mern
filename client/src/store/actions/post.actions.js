@@ -1,5 +1,5 @@
 import * as api from '../../api'
-import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST } from '../types/posts.types'
+import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from '../types/posts.types'
 
 export const getPosts = () => async (dispath) => {
     try {
@@ -33,6 +33,19 @@ export const updatePost = (id, postData) => async (dispath) => {
         
         dispath({
             type: UPDATE_POST,
+            payload: data 
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const deletePost = (id) => async (dispath) => {
+    try {
+        const { data } = await api.deletePost(id)   
+        
+        dispath({
+            type: DELETE_POST,
             payload: data 
         })
     } catch (error) {

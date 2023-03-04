@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import useStyles from './styles'
+import { useDispatch } from 'react-redux'
+import { deletePost } from '../../../store/actions/post.actions'
 import { PostForEditContext } from '../../../store/context/postForEdit.context'
 import { 
     Card, 
@@ -17,7 +19,13 @@ import moment from 'moment'
 const Post = ({ post }) => {
     const classes = useStyles()
 
+    const dispath = useDispatch()
+
     const { setPostForEdit } = useContext(PostForEditContext)
+
+    const deletePostHandler = (id) => {
+        dispath(deletePost(id))
+    }
 
     return (
         <Card className={classes.card}>
@@ -47,10 +55,15 @@ const Post = ({ post }) => {
                     }
                 </Typography>
             </div>
-            <CardContent>
-                <Typography 
+            <Typography 
                     className={classes.title} 
                     variant='h5' 
+                    gutterBottom 
+                >
+                    {post.title}
+                </Typography>
+            <CardContent>
+                <Typography 
                     gutterBottom 
                 >
                     {post.message}
@@ -60,7 +73,7 @@ const Post = ({ post }) => {
                 <Button size='small' color='primary' onClick={() => {}} >
                     <ThumbUpAltIcon fontSize='small' /> Like {post.likeCount}
                 </Button>
-                <Button size='small' color='primary' onClick={() => {}} >
+                <Button size='small' color='primary' onClick={() => { deletePostHandler(post._id) }} >
                     <DeleteIcon fontSize='small' />
                     Delete
                 </Button>

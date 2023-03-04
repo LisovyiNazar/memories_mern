@@ -22,6 +22,7 @@ const Form = () => {
     const { postForEdit, setPostForEdit } = useContext(PostForEditContext)
 
     useEffect(() => {
+        console.log('dfg');
         if (postForEdit) setPostData(postForEdit)
         else setPostData(initInputValue)
     }, [postForEdit])
@@ -32,15 +33,16 @@ const Form = () => {
         e.preventDefault()
 
         if (postForEdit) {
-            dispath(updatePost(postForEdit._id ,postData))
-            clearForm()
+            dispath(updatePost(postForEdit._id, postData))
         } else {
             dispath(createPost(postData))
         }
+        clearForm()
     }
 
     const clearForm = () => {
         setPostForEdit(undefined)
+        setPostData(initInputValue)
     }
 
     return (
