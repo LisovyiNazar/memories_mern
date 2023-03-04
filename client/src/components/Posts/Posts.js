@@ -7,6 +7,7 @@ import useStyles from './styles'
 const Posts = () => {
     const classes = useStyles()
     const posts = useSelector(state => state.posts)
+    // console.log(posts);
 
     return (
         !posts.length ? (

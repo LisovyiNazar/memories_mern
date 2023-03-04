@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import useStyles from './styles'
+import { PostForEditContext } from '../../../store/context/postForEdit.context'
 import { 
     Card, 
     CardActions, 
@@ -16,9 +17,10 @@ import moment from 'moment'
 const Post = ({ post }) => {
     const classes = useStyles()
 
+    const { setPostForEdit } = useContext(PostForEditContext)
+
     return (
         <Card className={classes.card}>
-
             <CardMedia 
                 component="img" 
                 src={post.selectedFile ? post.selectedFile : 'https://catalystcci.com/wp-content/uploads/gray-image-placeholder.png'} 
@@ -30,7 +32,11 @@ const Post = ({ post }) => {
                 <Typography variant='body2'>{moment(post.createdAt).fromNow()}</Typography>
             </div>
             <div className={classes.overlay2}>
-                <Button style={{color: 'white'}} size='small' onClick={() => {}} >
+                <Button 
+                    style={{color: 'white'}} 
+                    size='small' 
+                    onClick={() => {setPostForEdit(post)}} 
+                >
                     <MoreHorizIcon fontSize='medium' />
                 </Button>
             </div>

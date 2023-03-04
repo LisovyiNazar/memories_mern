@@ -1,37 +1,52 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { PostForEditContext } from '../../store/context/postForEdit.context'
 import { TextField, Button, Typography, Paper } from '@material-ui/core'
 import FileBase from 'react-file-base64'
 import { useDispatch } from 'react-redux'
-import { createPost } from '../../store/actions/post.actions'
+import { createPost, updatePost } from '../../store/actions/post.actions'
 import useStyles from './styles'
 
 const Form = () => {
     const classes = useStyles()
 
-    const [postData, setPostData] = useState({
+    const initInputValue = {
         creator: '',
         title: '',
         message: '',
         tags: '',
         selectedFile: ''
-    })
+    }
+
+    const [postData, setPostData] = useState(initInputValue)
+
+    const { postForEdit, setPostForEdit } = useContext(PostForEditContext)
+
+    useEffect(() => {
+        if (postForEdit) setPostData(postForEdit)
+        else setPostData(initInputValue)
+    }, [postForEdit])
 
     const dispath = useDispatch()
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        dispath(createPost(postData))
+        if (postForEdit) {
+            dispath(updatePost(postForEdit._id ,postData))
+            clearForm()
+        } else {
+            dispath(createPost(postData))
+        }
     }
 
     const clearForm = () => {
-        
+        setPostForEdit(undefined)
     }
 
     return (
         <Paper className={classes.paper}>
             <form autoComplete='off' noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
-                <Typography variant='h6'>Create a Memory</Typography>
+                <Typography variant='h6'>{ postForEdit ? 'Update' : 'Create' } a Memory</Typography>
                 <TextField 
                     name='creator' 
                     variant='outlined' 
