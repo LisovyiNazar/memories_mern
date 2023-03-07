@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import useStyles from './styles'
 import { useDispatch } from 'react-redux'
-import { deletePost } from '../../../store/actions/post.actions'
+import { deletePost, likePost } from '../../../store/actions/post.actions'
 import { PostForEditContext } from '../../../store/context/postForEdit.context'
 import { 
     Card, 
@@ -25,6 +25,10 @@ const Post = ({ post }) => {
 
     const deletePostHandler = (id) => {
         dispath(deletePost(id))
+    }
+
+    const likePostHandler = (id) => {
+        dispath(likePost(id))
     }
 
     return (
@@ -64,13 +68,15 @@ const Post = ({ post }) => {
                 </Typography>
             <CardContent>
                 <Typography 
-                    gutterBottom 
+                    variant='body2'
+                    color= 'textSecondary'
+                    component='p'
                 >
                     {post.message}
                 </Typography>
             </CardContent>
             <CardActions className={classes.cardActions}>
-                <Button size='small' color='primary' onClick={() => {}} >
+                <Button size='small' color='primary' onClick={() => { likePostHandler(post._id) }} >
                     <ThumbUpAltIcon fontSize='small' /> Like {post.likeCount}
                 </Button>
                 <Button size='small' color='primary' onClick={() => { deletePostHandler(post._id) }} >

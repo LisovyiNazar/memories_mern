@@ -1,5 +1,5 @@
 import * as api from '../../api'
-import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST } from '../types/posts.types'
+import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST, LIKE_POST } from '../types/posts.types'
 
 export const getPosts = () => async (dispath) => {
     try {
@@ -46,6 +46,19 @@ export const deletePost = (id) => async (dispath) => {
         
         dispath({
             type: DELETE_POST,
+            payload: data 
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const likePost = (id) => async (dispath) => {
+    try {
+        const { data } = await api.likePost(id)   
+        
+        dispath({
+            type: LIKE_POST,
             payload: data 
         })
     } catch (error) {
