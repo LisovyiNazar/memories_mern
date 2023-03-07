@@ -22,7 +22,6 @@ const Form = () => {
     const { postForEdit, setPostForEdit } = useContext(PostForEditContext)
 
     useEffect(() => {
-        console.log('dfg');
         if (postForEdit) setPostData(postForEdit)
         else setPostData(initInputValue)
     }, [postForEdit])
@@ -79,7 +78,7 @@ const Form = () => {
                     label='Tags' 
                     fullWidth
                     value={postData.tags}
-                    onChange={(e) => setPostData({ ...postData, tags: e.target.value })}
+                    onChange={(e) => setPostData({ ...postData, tags: e.target.value.split(',') })}
                 />
                 <div className={classes.fileInput}>
                     <FileBase 
