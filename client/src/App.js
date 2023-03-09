@@ -1,61 +1,22 @@
-import React, { useEffect } from 'react'
-import { Container, AppBar, Typography, Grow, Grid } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
-import MemoriesPhoto from './images/memories.png'
-import Posts from './components/Posts'
-import Form from './components/Form'
-import { getPosts } from './store/actions/post.actions'
-import useStyles from './styles';
+import React from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Container } from '@material-ui/core'
+import Navbar from './components/Navbar'
+import Home from './components/Home'
+import Auth from './components/Auth'
 
 const App = () => {
-    const classes = useStyles()
-    console.log(classes);
-    const dispath = useDispatch()
-
-    useEffect(() => {
-        dispath(getPosts())
-    }, [dispath])
 
     return (
-        <Container maxWidth='lg'>
-            <AppBar 
-                className={classes.appBar}
-                position='static' 
-                color='inherit'
-            >
-                <Typography 
-                    className={classes.heading} 
-                    variant='h2' 
-                    align='center'
-                >
-                    Memories
-                </Typography>
-                <img 
-                    className={classes.image} 
-                    src={MemoriesPhoto} 
-                    alt='' 
-                    height='60' 
-                />
-            </AppBar>
-            <Grow in>
-                <Container>
-                    <Grid 
-                        className={classes.mainContainer}
-                        container 
-                        justifyContent='space-between' 
-                        alignItems='stretch' 
-                        spacing={3}
-                    >
-                        <Grid item xs={12} sm={7}>
-                            <Posts />
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <Form />
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Grow>
-        </Container>
+        <BrowserRouter>
+            <Container maxWidth='lg'>
+                <Navbar />
+                <Routes>
+                    <Route path='/' exact element={<Home />} />
+                    <Route path='/auth' exact element={<Auth />} />
+                </Routes>
+            </Container>
+        </BrowserRouter>
     )
 }
 
