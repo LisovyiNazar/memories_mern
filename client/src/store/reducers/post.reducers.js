@@ -1,4 +1,4 @@
-import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST, LIKE_POST } from "../types/posts.types"
+import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST, LIKE_POST } from '../types/posts.types'
 
 const postsReduser = (state = [], action) => {
     switch (action.type) {

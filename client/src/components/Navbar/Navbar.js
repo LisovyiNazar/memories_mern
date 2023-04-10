@@ -1,13 +1,15 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
 import MemoriesPhoto from '../../images/memories.png'
+import { logout } from '../../store/actions/auth.actions'
+import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './styles'
 
 const Navbar = () => {
     const classes = useStyles()
-
-    const user = null
+    const dispath = useDispatch()
+    const { authenticate, user } = useSelector(state => state.auth)
 
     return (
         <AppBar 
@@ -34,26 +36,18 @@ const Navbar = () => {
             </div>
             <Toolbar className={classes.toolbar}>
                 {
-                    user ? (
+                    authenticate ? (
                         <div className={classes.profile}>
-                            <Avatar 
-                                className={classes.purple} 
-                                alt={user.result.namel}
-                                src={user.result.imageUrl}
-                            >
-                                {
-                                    user.result.name.charAt(0)
-                                }
-                            </Avatar>
                             <Typography 
                                 className={classes.userName} 
                                 variant='h6' 
                             >
                                 {
-                                    user.result.name
+                                    `${user.firstName} ${user.lastName}`
                                 }
                             </Typography>
                             <Button
+                                onClick={() => dispath(logout())}
                                 variant='contained'
                                 className={classes.logout} 
                                 color='secondary'

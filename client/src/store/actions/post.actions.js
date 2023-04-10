@@ -10,7 +10,7 @@ export const getPosts = () => async (dispath) => {
             payload: data ? data : []
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }
 
@@ -23,7 +23,7 @@ export const createPost = (post) => async (dispath) => {
             payload: data 
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }
 
@@ -36,7 +36,7 @@ export const updatePost = (id, postData) => async (dispath) => {
             payload: data 
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }
 
@@ -49,7 +49,7 @@ export const deletePost = (id) => async (dispath) => {
             payload: data 
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }
 
@@ -62,6 +62,6 @@ export const likePost = (id) => async (dispath) => {
             payload: data 
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error.message)
     }
 }

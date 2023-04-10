@@ -1,23 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Avatar, Paper, Container, Typography, Grid, Button } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Input from './Input'
-import { GoogleLogin } from '@react-oauth/google';
-import jwt_decode from 'jwt-decode'
+import { GoogleLogin } from '@react-oauth/google'
+import { googleLogin, login, register } from '../../store/actions/auth.actions'
+import { useDispatch, useSelector } from 'react-redux'
+import jwtDecode from 'jwt-decode'
 import useStyles from './styles'
+import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
     const classes = useStyles()
+    const dispath = useDispatch()
+    const navigate = useNavigate()
+    const { authenticate } = useSelector(state => state.auth)
     
     const [isSignUp, setIsSignUp] = useState(false)
+    const [formData, setFormData] = useState({})
+    const [formErrors, setFormErrors] = useState({})
     const [showPassword, setShowPassword] = useState(false)
 
-    const handleSubmit = () => {
+    useEffect(() => {
+        if(authenticate) {
+            navigate("/")
+        }
+    }, [authenticate, navigate])
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        setFormErrors({})
         
+        if (isSignUp) {
+            dispath(register(formData, setFormErrors))
+        } else {
+            dispath(login(formData, setFormErrors))
+        }
     }
 
-    const handleChange = () => {
-        
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
     const handleShowPassword = () => {
@@ -25,15 +48,25 @@ const Auth = () => {
     }
 
     const switchAuthMode = () => {
+        setFormErrors({})
         setIsSignUp(prev => !prev)
     }
 
     const googleSuccess = async (res) => {
-        console.log(jwt_decode(res?.credential));
+        try {
+            const userData = {
+                clientId: res?.clientId,
+                credentials: jwtDecode(res?.credential)
+            }
+
+            dispath(googleLogin(userData))
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const googleFailure = () => {
-        console.log(`Google 'Sing In' was unsuccessful. Try again later.`);
+        console.log(`Google 'Sing In' was unsuccessful. Try again later.`)
     }
 
     return (
@@ -86,21 +119,26 @@ const Auth = () => {
                             label='Email Address'
                             handleChange={handleChange}
                         />
-                         <Input
+                        <>{ formErrors.email }</>
+                        <Input
                             name='password'
                             type={showPassword ? 'text' : 'password'}
                             label='Password'
                             handleChange={handleChange}
                             handleShowPassword={handleShowPassword}
                         />
+                        <>{ formErrors.password }</>
                         {
                             isSignUp && (
-                                <Input 
-                                    name='confirmPassword'
-                                    type={showPassword ? 'text' : 'password'}
-                                    label='Confirm Password'
-                                    handleChange={handleChange}
-                                />
+                                <>
+                                    <Input 
+                                        name='confirmPassword'
+                                        type={showPassword ? 'text' : 'password'}
+                                        label='Confirm Password'
+                                        handleChange={handleChange}
+                                    />
+                                    { formErrors.confirmPassword }
+                                </>
                             )
                         }
                     </Grid>
