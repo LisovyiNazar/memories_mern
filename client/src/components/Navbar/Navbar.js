@@ -1,73 +1,47 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core'
-import MemoriesPhoto from '../../images/memories.png'
+import { FcPicture } from 'react-icons/fc'
 import { logout } from '../../store/actions/auth.actions'
 import { useDispatch, useSelector } from 'react-redux'
-import useStyles from './styles'
+import './index.scss'
 
 const Navbar = () => {
-    const classes = useStyles()
     const dispath = useDispatch()
     const { authenticate, user } = useSelector(state => state.auth)
 
     return (
-        <AppBar 
-            className={classes.appBar}
-            position='static' 
-            color='inherit'
-        >
-            <div className={classes.brandContainer}>
-                <Typography 
-                    component={Link}
-                    to='/'
-                    className={classes.heading} 
-                    variant='h2' 
-                    align='center'
-                >
-                    Memories
-                </Typography>
-                <img 
-                    className={classes.image} 
-                    src={MemoriesPhoto} 
-                    alt='' 
-                    height='60' 
-                />
+        <div className='navbar-container'>
+            <div className='navbar-brand-container'>
+                <Link to='/' className='brand-logo'>
+                    <h2 className='brand-name'>
+                        Memories
+                    </h2>
+                    <FcPicture className='brand-icon' />
+                </Link>
             </div>
-            <Toolbar className={classes.toolbar}>
+            <div className='navbar-info-container'>
                 {
                     authenticate ? (
-                        <div className={classes.profile}>
-                            <Typography 
-                                className={classes.userName} 
-                                variant='h6' 
-                            >
-                                {
-                                    `${user.firstName} ${user.lastName}`
-                                }
-                            </Typography>
-                            <Button
+                        <div className='profile-container'>
+                            <Link to='/profile' className='user-name'>
+                                { `${user.firstName} ${user.lastName}` }
+                            </Link>
+                            <button 
+                                type='button' 
+                                className='logout-button'
                                 onClick={() => dispath(logout())}
-                                variant='contained'
-                                className={classes.logout} 
-                                color='secondary'
                             >
                                 Logout
-                            </Button>
+                            </button>
                         </div>
                     ) : (
-                        <Button 
-                            component={Link}
-                            to='/auth'
-                            variant='contained'
-                            color='primary'
-                        >
+                        <Link to='/auth' className='login-button'>
                             Sign In
-                        </Button>
+                        </Link>
                     )
                 }
-            </Toolbar>
-        </AppBar>
+            </div>
+        </div>
     )
 }
 

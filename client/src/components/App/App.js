@@ -1,21 +1,21 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Container } from '@material-ui/core'
-import Navbar from './components/Navbar'
-import Home from './components/Home'
-import Auth from './components/Auth'
+import Navbar from '../Navbar'
+import Home from '../Home'
+import Auth from '../Auth'
+import './index.scss'
 
 const App = () => {
 
     return (
         <BrowserRouter>
-            <Container maxWidth='lg'>
+            <div className='app-container'>
                 <Navbar />
                 <Routes>
                     <Route path='/' exact element={<Home />} />
                     <Route path='/auth' exact element={<Auth />} />
                 </Routes>
-            </Container>
+            </div>
         </BrowserRouter>
     )
 }

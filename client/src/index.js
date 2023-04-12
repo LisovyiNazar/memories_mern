@@ -6,7 +6,7 @@ import thunk from 'redux-thunk'
 import reducers from './store/reducers'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import { PostForEditProvider } from './store/context/postForEdit.context'
-import App from './App'
+import App from './components/App'
 import './index.css'
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)))
