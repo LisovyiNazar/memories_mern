@@ -3,7 +3,7 @@ import { getPosts, createPost, updatePost, deletePost, likePost } from '../contr
 
 const postsRouter = express.Router()
 
-postsRouter.get('/', getPosts)
+postsRouter.get('/:page', getPosts)
 postsRouter.post('/', createPost)
 postsRouter.patch('/:id', updatePost)
 postsRouter.delete('/:id', deletePost)

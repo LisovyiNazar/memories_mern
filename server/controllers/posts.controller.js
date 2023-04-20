@@ -2,10 +2,22 @@ import mongoose from 'mongoose'
 import PostMessage from "../models/postMessage.model.js"
 
 export const getPosts = async (req, res) => {
-    try {
-        const postMessages = await PostMessage.find()
+    const { page } = req.params
+    const POST_PER_PAGE = 4
 
-        res.status(200).json(postMessages)
+    try {
+        const allPosts = await PostMessage.find()
+
+        const posts = await PostMessage.find()
+            .limit(POST_PER_PAGE)
+            .skip(POST_PER_PAGE * page - POST_PER_PAGE)
+
+        res.status(200).json({
+            items: posts,
+            pagination: {
+                pageCount: Math.ceil(allPosts.length / POST_PER_PAGE)
+            }
+        })
     } catch (error) {
         res.status(404).json({ message: error.message })
     }

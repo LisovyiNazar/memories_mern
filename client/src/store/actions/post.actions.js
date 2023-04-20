@@ -1,13 +1,19 @@
 import * as api from '../../api'
 import { FETCH_ALL_POSTS, CREATE_POST, UPDATE_POST, DELETE_POST, LIKE_POST } from '../types/posts.types'
+import { SET_PAGINAION_DATA } from '../types/pagination.types'
 
-export const getPosts = () => async (dispath) => {
+export const getPosts = (page) => async (dispath) => {
     try {
-        const { data } = await api.fetchPosts()
+        const { data } = await api.fetchPosts(page)
         
         dispath({
             type: FETCH_ALL_POSTS,
-            payload: data ? data : []
+            payload: data ? data.items : []
+        })
+
+        dispath({
+            type: SET_PAGINAION_DATA,
+            payload: data ? data.pagination : {}
         })
     } catch (error) {
         console.log(error.message)
