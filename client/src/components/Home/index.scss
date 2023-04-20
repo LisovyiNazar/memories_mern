@@ -1,14 +1,15 @@
 .home-wrapper {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    display: flex;
+    flex-direction: row;
     
     .posts-wrapper { 
-        grid-area: 1 / 1 / 2 / 4; 
+        width: 75%;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
     }
     
     .form-wrapper { 
-        grid-area: 1 / 4 / 2 / 5; 
+        width: 25%;
     }
 }

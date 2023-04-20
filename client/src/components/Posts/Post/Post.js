@@ -1,25 +1,14 @@
-import React, { useContext } from 'react'
-import useStyles from './styles'
+import React, { useContext, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deletePost, likePost } from '../../../store/actions/post.actions'
 import { PostForEditContext } from '../../../store/context/postForEdit.context'
-import { 
-    Card, 
-    CardActions, 
-    CardContent, 
-    CardMedia, 
-    Button, 
-    Typography 
-} from '@material-ui/core'
-import ThumbUpAltIcon from '@material-ui/icons/ThumbDownAlt'
-import DeleteIcon from '@material-ui/icons/Delete'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import { AiTwotoneSetting, AiOutlineHeart } from 'react-icons/ai'
 import moment from 'moment'
+import './index.scss'
 
-const Post = ({ post }) => {
-    const classes = useStyles()
-
+const Post = ({ post, editMode = true }) => {
     const dispath = useDispatch()
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
     const { setPostForEdit } = useContext(PostForEditContext)
 
@@ -27,64 +16,59 @@ const Post = ({ post }) => {
         dispath(deletePost(id))
     }
 
+    const openSettingsHandler = () => {
+        setIsSettingsOpen(prev => !prev)
+    }
+
     const likePostHandler = (id) => {
         dispath(likePost(id))
     }
 
     return (
-        <Card className={classes.card}>
-            <CardMedia 
-                component="img" 
-                src={post.selectedFile ? post.selectedFile : 'https://catalystcci.com/wp-content/uploads/gray-image-placeholder.png'} 
-                title={post.title} 
-                alt=""
-            />
-            <div className={classes.overlay}>
-                <Typography variant='h6'>{post.creator}</Typography>
-                <Typography variant='body2'>{moment(post.createdAt).fromNow()}</Typography>
+        <div className='post-wrapper'>
+            <div className='post-container'>
+                <div className='img-container'>
+                    <img 
+                        className='post-image'
+                        alt=''
+                        src={post.selectedFile ? post.selectedFile : 'https://www.arungudelli.com/tutorial/css/auto-resize-an-image-to-fit-into-a-html-div-using-css/Auto-resize-image_hua7cbf3f83f09813e25d06413cbc6df69_18316_640x0_resize_q75_h2_box.webp'} 
+                    />
+                    <div className='settings-container'>
+                        <div className='settings'>
+                            {
+                                editMode ? <AiTwotoneSetting onClick={() => openSettingsHandler()}/> : <></>
+                            }
+                            {
+                                isSettingsOpen && (
+                                    <>
+                                        <button type='button' onClick={() => { setPostForEdit(post) }}>Edit</button>
+                                        <button type='button' onClick={() => { deletePostHandler(post._id) }}>Delete</button>
+                                    </>
+                                )
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+                <div className='info-container'>
+                    <strong className='title'>{post.title}</strong>
+                    <div className='message'>
+                        <span>{post.message}</span>
+                    </div>
+                    <div className='tags'>{post.tags.map((tag) => <span key={tag}>#{tag} </span>)}</div>
+                    <div className='post-actions'>
+                        <div className='like-container'>
+                            <AiOutlineHeart 
+                                className='like'
+                                onClick={() => likePostHandler(post._id)}
+                            />
+                            <div>{post.likeCount}</div>
+                        </div>
+                        <span>Created by {post.creator} {moment(post.createdAt).fromNow()}</span>
+                    </div>
+                </div>
             </div>
-            <div className={classes.overlay2}>
-                <Button 
-                    style={{color: 'white'}} 
-                    size='small' 
-                    onClick={() => {setPostForEdit(post)}} 
-                >
-                    <MoreHorizIcon fontSize='medium' />
-                </Button>
-            </div>
-            <div className={classes.details}>
-                <Typography variant='body2' >
-                    {
-                        post.tags.map((tag) => `#${tag} `)
-                    }
-                </Typography>
-            </div>
-            <Typography 
-                    className={classes.title} 
-                    variant='h5' 
-                    gutterBottom 
-                >
-                    {post.title}
-                </Typography>
-            <CardContent>
-                <Typography 
-                    variant='body2'
-                    color= 'textSecondary'
-                    component='p'
-                >
-                    {post.message}
-                </Typography>
-            </CardContent>
-            <CardActions className={classes.cardActions}>
-                <Button size='small' color='primary' onClick={() => { likePostHandler(post._id) }} >
-                    <ThumbUpAltIcon fontSize='small' /> Like {post.likeCount}
-                </Button>
-                <Button size='small' color='primary' onClick={() => { deletePostHandler(post._id) }} >
-                    <DeleteIcon fontSize='small' />
-                    Delete
-                </Button>
-            </CardActions>
-        </Card>
+        </div>
     )
 }
 
