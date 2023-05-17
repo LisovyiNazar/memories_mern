@@ -46,7 +46,6 @@ export const register = (formData, setFormErrors) => async (dispath) => {
         if (formData.password === formData.confirmPassword) {
             delete formData.confirmPassword
             const { data } = await api.register(formData)
-            console.log(data);
 
             if (data.errors) {
                 setFormErrors(data.errors)
@@ -63,8 +62,6 @@ export const register = (formData, setFormErrors) => async (dispath) => {
         } else (
             setFormErrors({ confirmPassword: `Password don't matches` })
         )
-        
-
     } catch (error) {
         console.log(error.message)
     }

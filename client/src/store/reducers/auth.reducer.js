@@ -6,7 +6,7 @@ const cookies = new Cookies()
 
 const authDefaultState = {
     authenticate: false,
-    user: {}
+    user: null
 }
 
 const jwtAuthCookie = cookies.get('jwt_auth')

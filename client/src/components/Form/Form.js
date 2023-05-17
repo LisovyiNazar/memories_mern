@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { PostForEditContext } from '../../store/context/postForEdit.context'
 import FileBase from 'react-file-base64'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createPost, updatePost } from '../../store/actions/post.actions'
 import './index.scss'
 
@@ -13,6 +13,8 @@ const Form = () => {
         tags: '',
         selectedFile: ''
     }
+
+    const { user } = useSelector(state => state.auth)
 
     const [postData, setPostData] = useState(initInputValue)
 
@@ -31,7 +33,11 @@ const Form = () => {
         if (postForEdit) {
             dispath(updatePost(postForEdit._id, postData))
         } else {
-            dispath(createPost(postData))
+            if (user) {
+                dispath(createPost({ ...postData, creator: user }))
+            } else {
+                dispath(createPost(postData))
+            }
         }
         clearForm()
     }
@@ -40,6 +46,7 @@ const Form = () => {
         setPostForEdit(undefined)
         setPostData(initInputValue)
     }
+    console.log(user);
 
     return (
         <form
@@ -47,16 +54,21 @@ const Form = () => {
             onSubmit={handleSubmit}
         >
             <h2>{ postForEdit ? 'Update' : 'Create' } a Memory</h2>
-            <div className="group">
-                <input 
-                    type="text"
-                    required
-                    value={postData.creator}
-                    onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-                />
-                <span className="bar"></span>
-                <label>Creator</label>
-            </div>
+            {
+                user ? <></> : (
+                    <div className="group">
+                        <input 
+                            type="text"
+                            required
+                            value={postData.creator}
+                            onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
+                        />
+                        <span className="bar"></span>
+                        <label>Creator</label>
+                    </div>
+                )
+            }
+            
             <div className="group">
                 <input 
                     type="text" 

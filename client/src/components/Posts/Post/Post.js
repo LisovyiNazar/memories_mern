@@ -64,7 +64,7 @@ const Post = ({ post, editMode = true }) => {
                             />
                             <div>{post.likeCount}</div>
                         </div>
-                        <span>Created by {post.creator} {moment(post.createdAt).fromNow()}</span>
+                        <span>Created by {post?.creator.nickName || post?.creator } {moment(post.createdAt).fromNow()}</span>
                     </div>
                 </div>
             </div>

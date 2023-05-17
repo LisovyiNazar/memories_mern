@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 export const googleLogin = async (req, res) => {
     try {
         const { given_name, family_name, email } = req.body.credentials
-        const userData = { email: email, firstName: given_name, lastName: family_name }
+        const userData = { email: email, firstName: given_name, lastName: family_name, nickName: email }
         const userExist = await Users.findOne({ email: email })
         
         if (!userExist) {

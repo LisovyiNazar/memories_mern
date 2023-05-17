@@ -4,7 +4,7 @@ import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
 
 const Input = (props) => {
-    const { half, name, handleChange, label, autoFocus, type, handleShowPassword } = props
+    const { half, name, handleChange, label, autoFocus, type, handleShowPassword, required = true } = props
 
     return (
         <Grid 
@@ -16,7 +16,7 @@ const Input = (props) => {
                 name={name}
                 onChange={handleChange}
                 variant='outlined'
-                required
+                required={required}
                 fullWidth
                 label={label}
                 autoFocus={autoFocus}

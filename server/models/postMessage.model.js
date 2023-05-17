@@ -1,9 +1,11 @@
 import mongoose from 'mongoose'
 
-const postShema = mongoose.Schema({
+const { Schema } = mongoose
+
+const postShema = Schema({
     title: String,
     message: String,
-    creator: String,
+    creator: Schema.Types.Mixed,
     tags: [String],
     selectedFile: String,
     likeCount: {

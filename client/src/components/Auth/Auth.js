@@ -110,6 +110,12 @@ const Auth = () => {
                                         handleChange={handleChange}
                                         half
                                     />
+                                    <Input
+                                        name='nickName'
+                                        label='Nick Name'
+                                        required={false}
+                                        handleChange={handleChange}
+                                    />
                                 </>
                             )
                         }
