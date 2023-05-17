@@ -8,7 +8,7 @@ const Home = () => {
     return (
         <div className='home-wrapper'>
             <Posts />
-            <div className='form-wrapper'>
+            <div className='sidebar'>
                 <Form />
             </div>
         </div>
