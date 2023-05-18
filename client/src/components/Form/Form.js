@@ -46,7 +46,6 @@ const Form = () => {
         setPostForEdit(undefined)
         setPostData(initInputValue)
     }
-    console.log(user);
 
     return (
         <form
