@@ -4,16 +4,23 @@ import { GOOGLE_LOGIN, LOGOUT } from '../types/auth.types'
 
 const cookies = new Cookies()
 
-export const googleLogin = (userData) => async (dispath) => {
+export const googleLogin = (userData, isNickName, setNickName, setFormErrors) => async (dispath) => {
     try {
-        const { data } = await api.googleLogin(userData)
+        const { data } = await api.googleLogin({ ...userData, isNickName})
 
-        if (data.token) cookies.set('jwt_auth', data.token)
-        
-        dispath({
-            type: GOOGLE_LOGIN,
-            payload: data.user ? data.user : []
-        })
+        if (data.errors) {
+            setFormErrors(data.errors)
+        } if (data.continue) {
+            setNickName(true)
+        }
+        if (data.token) {
+            cookies.set('jwt_auth', data.token)
+            
+            dispath({
+                type: GOOGLE_LOGIN,
+                payload: data.user ? data.user : []
+            })
+        }
     } catch (error) {
         console.log(error.message)
     }
@@ -22,7 +29,6 @@ export const googleLogin = (userData) => async (dispath) => {
 export const login = (formData, setFormErrors) => async (dispath) => {
     try {
         const { data } = await api.login(formData)
-        console.log(data);
 
         if (data.errors) {
             setFormErrors(data.errors)

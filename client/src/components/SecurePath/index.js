@@ -8,7 +8,6 @@ const SecurePath = () => {
 
     useEffect(() => {
         if (authenticate === false) {
-            console.log('red');
             navigate('/auth')
         }
     }, [authenticate])

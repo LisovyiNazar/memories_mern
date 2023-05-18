@@ -53,21 +53,6 @@ const Form = () => {
             onSubmit={handleSubmit}
         >
             <h2>{ postForEdit ? 'Update' : 'Create' } a Memory</h2>
-            {
-                user ? <></> : (
-                    <div className="group">
-                        <input 
-                            type="text"
-                            required
-                            value={postData.creator}
-                            onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-                        />
-                        <span className="bar"></span>
-                        <label>Creator</label>
-                    </div>
-                )
-            }
-            
             <div className="group">
                 <input 
                     type="text" 

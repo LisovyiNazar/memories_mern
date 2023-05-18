@@ -19,6 +19,8 @@ const Auth = () => {
     const [formData, setFormData] = useState({})
     const [formErrors, setFormErrors] = useState({})
     const [showPassword, setShowPassword] = useState(false)
+    const [isNickName, setNickName] = useState(false)
+    const [isGoogleLogin, setGoogleLogin] = useState(false)
 
     useEffect(() => {
         if(authenticate) {
@@ -28,11 +30,13 @@ const Auth = () => {
 
 
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e?.preventDefault()
 
         setFormErrors({})
         
-        if (isSignUp) {
+        if (isGoogleLogin) {
+            dispath(googleLogin(formData, isNickName, setNickName, setFormErrors))
+        } else if (isSignUp) {
             dispath(register(formData, setFormErrors))
         } else {
             dispath(login(formData, setFormErrors))
@@ -59,7 +63,9 @@ const Auth = () => {
                 credentials: jwtDecode(res?.credential)
             }
 
-            dispath(googleLogin(userData))
+            setGoogleLogin(true)
+            setFormData(userData)
+            dispath(googleLogin(userData, isNickName, setNickName))
         } catch (error) {
             console.log(error)
         }
@@ -78,106 +84,142 @@ const Auth = () => {
                 className={classes.paper}
                 elevation={3}
             >
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography variant='h5'>
-                    {
-                        isSignUp ? 'Sign Up' :  'Sing In'
-                    }
-                </Typography>
+                
+                {
+                    !isNickName && (
+                        <>
+                            <Avatar className={classes.avatar}>
+                                <LockOutlinedIcon />
+                            </Avatar>
+                            <Typography variant='h5'>
+                                {
+                                    isSignUp ? 'Sign Up' :  'Sing In'
+                                }
+                            </Typography>
+                        </>
+                    )
+                }
                 <form 
                     className={classes.form}
                     onSubmit={handleSubmit}
                 >
-                    <Grid
-                        container
-                        spacing={2}
-                    >
-                        {
-                            isSignUp && (
-                                <>
+                
+                    {
+                        isNickName ? (
+                            <>
+                                <Input
+                                    name='nickName'
+                                    label='Nick Name'
+                                    handleChange={handleChange}
+                                    autoFocus
+                                />
+                                <>{ formErrors.nickName }</>
+                                <Button
+                                    type='submit'
+                                    fullWidth
+                                    variant='contained'
+                                    color='primary'
+                                    className={classes.submit}
+                                >
+                                    {
+                                        isSignUp ? 'Sign Up' :  'Sing In'
+                                    }
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Grid
+                                    container
+                                    spacing={2}
+                                >
+                                    {
+                                        isSignUp && (
+                                            <>
+                                                <Input
+                                                    name='firstName'
+                                                    label='First Name'
+                                                    handleChange={handleChange}
+                                                    autoFocus
+                                                    half
+                                                />
+                                                <Input
+                                                    name='lastName'
+                                                    label='Last Name'
+                                                    handleChange={handleChange}
+                                                    half
+                                                />
+                                                <Input
+                                                    name='nickName'
+                                                    label='Nick Name'
+                                                    required={false}
+                                                    handleChange={handleChange}
+                                                />
+                                            </>
+                                        )
+                                    }
                                     <Input
-                                        name='firstName'
-                                        label='First Name'
+                                        name='email'
+                                        type='email'
+                                        label='Email Address'
                                         handleChange={handleChange}
-                                        autoFocus
-                                        half
                                     />
+                                    <>{ formErrors.email }</>
                                     <Input
-                                        name='lastName'
-                                        label='Last Name'
-                                        handleChange={handleChange}
-                                        half
-                                    />
-                                    <Input
-                                        name='nickName'
-                                        label='Nick Name'
-                                        required={false}
-                                        handleChange={handleChange}
-                                    />
-                                </>
-                            )
-                        }
-                        <Input
-                            name='email'
-                            type='email'
-                            label='Email Address'
-                            handleChange={handleChange}
-                        />
-                        <>{ formErrors.email }</>
-                        <Input
-                            name='password'
-                            type={showPassword ? 'text' : 'password'}
-                            label='Password'
-                            handleChange={handleChange}
-                            handleShowPassword={handleShowPassword}
-                        />
-                        <>{ formErrors.password }</>
-                        {
-                            isSignUp && (
-                                <>
-                                    <Input 
-                                        name='confirmPassword'
+                                        name='password'
                                         type={showPassword ? 'text' : 'password'}
-                                        label='Confirm Password'
+                                        label='Password'
                                         handleChange={handleChange}
+                                        handleShowPassword={handleShowPassword}
                                     />
-                                    { formErrors.confirmPassword }
-                                </>
-                            )
-                        }
-                    </Grid>
-                    <Button
-                        type='submit'
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                        className={classes.submit}
-                    >
-                        {
-                            isSignUp ? 'Sign Up' :  'Sing In'
-                        }
-                    </Button>
-                    <GoogleLogin 
-                        className={classes.googleButton}
-                        onSuccess={googleSuccess}
-                        onFailure={googleFailure}
-                    />
-                    <Grid
-                        container
-                        justifyContent='flex-end'
-                    >
-                        <Grid item>
-                            <Button onClick={switchAuthMode} >
-                                {
-                                    isSignUp ? 'Already have an account? Sign In' 
-                                    :  `Don't have an account? Sing Up`
-                                }
-                            </Button>
-                        </Grid>
-                    </Grid>
+                                    <>{ formErrors.password }</>
+                                    {
+                                        isSignUp && (
+                                            <>
+                                                <Input 
+                                                    name='confirmPassword'
+                                                    type={showPassword ? 'text' : 'password'}
+                                                    label='Confirm Password'
+                                                    handleChange={handleChange}
+                                                />
+                                                { formErrors.confirmPassword }
+                                            </>
+                                        )
+                                    }
+                                </Grid>
+                                <Button
+                                    type='submit'
+                                    fullWidth
+                                    variant='contained'
+                                    color='primary'
+                                    className={classes.submit}
+                                >
+                                    {
+                                        isSignUp ? 'Sign Up' :  'Sing In'
+                                    }
+                                </Button>
+                                <GoogleLogin 
+                                    className={classes.googleButton}
+                                    onSuccess={googleSuccess}
+                                    onFailure={googleFailure}
+                                />
+                                <Grid
+                                    container
+                                    justifyContent='flex-end'
+                                >
+                                    <Grid item>
+                                        <Button onClick={switchAuthMode} >
+                                            {
+                                                isSignUp ? 'Already have an account? Sign In' 
+                                                :  `Don't have an account? Sing Up`
+                                            }
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </>
+                        )
+                    }
                 </form>
+                
             </Paper>
         </Container>
     )

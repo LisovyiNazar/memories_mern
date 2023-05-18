@@ -3,25 +3,49 @@ import jwt from 'jsonwebtoken'
 
 export const googleLogin = async (req, res) => {
     try {
-        const { given_name, family_name, email } = req.body.credentials
-        const userData = { email: email, firstName: given_name, lastName: family_name, nickName: email }
+        const { credentials, nickName, isNickName } = req.body
+        const { given_name, family_name, email } = credentials
+        const userData = { email: email, firstName: given_name, lastName: family_name, nickName: nickName }
         const userExist = await Users.findOne({ email: email })
         
-        if (!userExist) {
-            await userCreate(userData).then((data) => {
-                userData.id = data._id
-            })
+        if (!userExist && !isNickName) {
+            res.status(200).json({ continue: true })
+        } else if (!userExist && isNickName) {
+            const userNickName = await Users.findOne({ nickName: nickName })
+
+            if (!userNickName) {
+                await userCreate(userData).then((data) => {
+                    userData.id = data._id
+                })
+                
+                const token = jwt.sign(
+                    userData,
+                    process.env.TOKEN_KEY, 
+                    {
+                        expiresIn: process.env.TOKEN_EXP
+                    }
+                )
+        
+                res.status(200).json({ user: userData, token: token})
+            } else {
+                res.status(200).json({ errors: { nickName: `User with this nickName already exist` } })
+            }
+
+        } else if (userExist) {
+            const { _id, email, given_name, family_name, nickName } = userExist
+            const userData = { id: _id, email: email, firstName: given_name, lastName: family_name, nickName: nickName }
+            
+            const token = jwt.sign(
+                userData,
+                process.env.TOKEN_KEY, 
+                {
+                    expiresIn: process.env.TOKEN_EXP
+                }
+            )
+    
+            res.status(200).json({ user: userData, token: token})
         }
 
-        const token = jwt.sign(
-            userData,
-            process.env.TOKEN_KEY, 
-            {
-                expiresIn: process.env.TOKEN_EXP
-            }
-        )
-
-        res.status(200).json({ user: userData, token: token})
     } catch (error) {
         res.status(404).json({ message: error.message })
     }
@@ -45,7 +69,7 @@ export const login = async (req, res) => {
                     id: _id,
                     email: email,
                     firstName: firstName,
-                    lastName: lastName
+                    lastName: lastName,
                 }
     
                 const token = jwt.sign(

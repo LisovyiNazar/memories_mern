@@ -5,6 +5,7 @@ import { PostForEditContext } from '../../../store/context/postForEdit.context'
 import { AiTwotoneSetting, AiOutlineHeart } from 'react-icons/ai'
 import moment from 'moment'
 import './index.scss'
+import { Link } from 'react-router-dom'
 
 const Post = ({ post, editMode = true }) => {
     const dispath = useDispatch()
@@ -55,7 +56,7 @@ const Post = ({ post, editMode = true }) => {
                     <div className='message'>
                         <span>{post.message}</span>
                     </div>
-                    <div className='tags'>{post.tags.map((tag) => <span key={tag}>#{tag} </span>)}</div>
+                    <div className='tags'>{post.tags.map((tag, i) => <span key={`${tag}-${i}`}>#{tag} </span>)}</div>
                     <div className='post-actions'>
                         <div className='like-container'>
                             <AiOutlineHeart 
@@ -64,7 +65,7 @@ const Post = ({ post, editMode = true }) => {
                             />
                             <div>{post.likeCount}</div>
                         </div>
-                        <span>Created by {post?.creator.nickName || post?.creator } {moment(post.createdAt).fromNow()}</span>
+                        <span>Created by <Link to={`/user/@${ post.creator.nickName }`}>{ post.creator.nickName }</Link> {moment(post.createdAt).fromNow()}</span>
                     </div>
                 </div>
             </div>

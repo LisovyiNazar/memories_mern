@@ -7,7 +7,7 @@ import './index.scss'
 
 const Navbar = () => {
     const dispath = useDispatch()
-    const { authenticate, user } = useSelector(state => state.auth)
+    const { user } = useSelector(state => state.auth)
 
     return (
         <div className='navbar-container'>
@@ -20,26 +20,18 @@ const Navbar = () => {
                 </Link>
             </div>
             <div className='navbar-info-container'>
-                {
-                    authenticate ? (
-                        <div className='profile-container'>
-                            <Link to='/profile' className='user-name'>
-                                { `${user.firstName} ${user.lastName}` }
-                            </Link>
-                            <button 
-                                type='button' 
-                                className='logout-button'
-                                onClick={() => dispath(logout())}
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    ) : (
-                        <Link to='/auth' className='login-button'>
-                            Sign In
-                        </Link>
-                    )
-                }
+                <div className='profile-container'>
+                    <Link to={`/user/@${ user?.nickName }`} className='user-name'>
+                    @{ user?.nickName }
+                    </Link>
+                    <button 
+                        type='button' 
+                        className='logout-button'
+                        onClick={() => dispath(logout())}
+                    >
+                        Logout
+                    </button>
+                </div>
             </div>
         </div>
     )
