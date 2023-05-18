@@ -36,22 +36,26 @@ export const login = async (req, res) => {
         if (user) {
             const { _id, email, firstName, lastName } = user
 
-            const userData = {
-                id: _id,
-                email: email,
-                firstName: firstName,
-                lastName: lastName
+            if (!user.password) {
+                res.status(200).json({ errors: { email: `This email was used by gmail registration` }})
             }
 
-            const token = jwt.sign(
-                userData,
-                process.env.TOKEN_KEY, 
-                {
-                    expiresIn: process.env.TOKEN_EXP
-                }
-            )
-
             if (user.password === password) {
+                const userData = {
+                    id: _id,
+                    email: email,
+                    firstName: firstName,
+                    lastName: lastName
+                }
+    
+                const token = jwt.sign(
+                    userData,
+                    process.env.TOKEN_KEY, 
+                    {
+                        expiresIn: process.env.TOKEN_EXP
+                    }
+                )
+
                 res.status(200).json({ user: user, token: token})
             } else {
                 res.status(200).json({ errors: { password: `Incorect password` } })
