@@ -154,6 +154,7 @@ const Auth = () => {
                                                     required={false}
                                                     handleChange={handleChange}
                                                 />
+                                                <>{ formErrors.nickName }</>
                                             </>
                                         )
                                     }

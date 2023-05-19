@@ -99,17 +99,24 @@ export const register = async (req, res) => {
         const checkUser = await Users.findOne({ email: email })
 
         if (!checkUser) {
-            const createdUser = await userCreate(req.body)
-    
-            const token = jwt.sign(
-                { ...req.body },
-                process.env.TOKEN_KEY, 
-                {
-                    expiresIn: process.env.TOKEN_EXP
-                }
-            )
-    
-            res.status(200).json({ user: createdUser, token: token })
+
+            const userNickName = await Users.findOne({ nickName: req.body.nickName })
+            if (userNickName) {
+                res.status(200).json({ errors: {  nickName: `User with this nickname already exist` } })
+            } else {
+                const createdUser = await userCreate(req.body)
+        
+                const token = jwt.sign(
+                    { ...req.body },
+                    process.env.TOKEN_KEY, 
+                    {
+                        expiresIn: process.env.TOKEN_EXP
+                    }
+                )
+        
+                res.status(200).json({ user: createdUser, token: token })
+            }
+
         } else {
             res.status(200).json({ errors: { email: `User with this email already exist` } })
         }
