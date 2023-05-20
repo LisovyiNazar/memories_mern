@@ -1,3 +1,6 @@
 .app-container {
-    padding: 0px 20px;
+    margin: 0px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }

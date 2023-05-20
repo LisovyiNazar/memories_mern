@@ -20,6 +20,26 @@ export const getPosts = (page) => async (dispath) => {
     }
 }
 
+export const getUserPosts = async (nickname, setUserPosts) => {
+    try {
+        const { data } = await api.fetchUserPosts(nickname)
+        
+        setUserPosts(data)
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+export const getLikedPosts = async (nickname, setLikedPosts) => {
+    try {
+        const { data } = await api.fetchLikedPosts(nickname)
+        
+        setLikedPosts(data)
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
 export const createPost = (post) => async (dispath) => {
     try {
         const { data } = await api.createPost(post)
@@ -59,9 +79,9 @@ export const deletePost = (id) => async (dispath) => {
     }
 }
 
-export const likePost = (id) => async (dispath) => {
+export const likePost = (id, userId) => async (dispath) => {
     try {
-        const { data } = await api.likePost(id)   
+        const { data } = await api.likePost(id, userId)   
         
         dispath({
             type: LIKE_POST,

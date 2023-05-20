@@ -21,7 +21,7 @@ const Navbar = () => {
             </div>
             <div className='navbar-info-container'>
                 <div className='profile-container'>
-                    <Link to={`/user/@${ user?.nickName }`} className='user-name'>
+                    <Link to={`/user/${ user?.nickName }`} className='user-name'>
                     @{ user?.nickName }
                     </Link>
                     <button 

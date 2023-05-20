@@ -45,7 +45,7 @@ const Posts = () => {
                 <div className='posts-wrapper'>
                     {
                         posts.map(post => (
-                            <Post key={post._id} post={post} />
+                            <Post key={post._id} post={post} editMode={false} />
                         ))
                     }
                     <div className='pagination-wrapper'>

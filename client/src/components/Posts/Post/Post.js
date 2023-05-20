@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deletePost, likePost } from '../../../store/actions/post.actions'
 import { PostForEditContext } from '../../../store/context/postForEdit.context'
 import { AiTwotoneSetting, AiOutlineHeart } from 'react-icons/ai'
@@ -9,6 +9,9 @@ import { Link } from 'react-router-dom'
 
 const Post = ({ post, editMode = true }) => {
     const dispath = useDispatch()
+    
+    const { user } = useSelector(state => state.auth)
+
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
 
     const { setPostForEdit } = useContext(PostForEditContext)
@@ -22,7 +25,7 @@ const Post = ({ post, editMode = true }) => {
     }
 
     const likePostHandler = (id) => {
-        dispath(likePost(id))
+        dispath(likePost(id, user.id))
     }
 
     return (

@@ -58,7 +58,7 @@ export const login = async (req, res) => {
         const user = await Users.findOne({ email: email })
         
         if (user) {
-            const { _id, email, firstName, lastName } = user
+            const { _id, email, firstName, lastName, nickName } = user
 
             if (!user.password) {
                 res.status(200).json({ errors: { email: `This email was used by gmail registration` }})
@@ -70,6 +70,7 @@ export const login = async (req, res) => {
                     email: email,
                     firstName: firstName,
                     lastName: lastName,
+                    nickName: nickName
                 }
     
                 const token = jwt.sign(

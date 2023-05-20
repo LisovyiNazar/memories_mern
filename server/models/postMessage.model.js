@@ -5,7 +5,7 @@ const { Schema } = mongoose
 const postShema = Schema({
     title: String,
     message: String,
-    creator: Schema.Types.Mixed,
+    creator: Object,
     tags: [String],
     selectedFile: String,
     likeCount: {

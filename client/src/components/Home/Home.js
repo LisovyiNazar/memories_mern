@@ -1,6 +1,5 @@
 import React from 'react'
 import Posts from '../Posts'
-import Form from '../Form'
 import Navbar from '../Navbar'
 import './index.scss'
 
@@ -11,9 +10,6 @@ const Home = () => {
             <Navbar/>
             <div className='home-wrapper'>
                 <Posts />
-                <div className='sidebar'>
-                    <Form />
-                </div>
             </div>
         </>
     )
